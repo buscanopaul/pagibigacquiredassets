@@ -4,7 +4,31 @@ import Map from "@/components/home/Map";
 import MapSkeleton from "@/components/home/MapSkeleton";
 import { useEffect, useState } from "react";
 
-async function getProperties(page = 1, limit = 9) {
+type Property = {
+  pagIbigPropertyNumber: string;
+  name: string;
+  description: string;
+  floorArea: number;
+  lotArea: number;
+  province: string;
+  propertyType: string;
+  rentalPrice: number;
+  slug: string;
+  remarksType: string;
+  requiredGrossMonthlyIncome: number;
+  tctCctNo: string;
+  id: string;
+  images: Array<{ fileName: string; url: string }>;
+  city: string;
+  barangay: string;
+  appraisalDate: string;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
+};
+
+async function getProperties(page = 1, limit = 9): Promise<Property[]> {
   const HYGRAPH_ENDPOINT = process.env.NEXT_PUBLIC_HYGRAPH_ENDPOINT;
   if (!HYGRAPH_ENDPOINT) {
     throw new Error("HYGRAPH_ENDPOINT is not set");
@@ -58,12 +82,12 @@ async function getProperties(page = 1, limit = 9) {
 }
 
 export default function Home() {
-  const [properties, setProperties] = useState([]);
+  const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
-  const fetchProperties = async (page) => {
+  const fetchProperties = async (page: number) => {
     setLoading(true);
     const props = await getProperties(page, itemsPerPage);
     setProperties(props);

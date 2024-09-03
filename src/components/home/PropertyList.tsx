@@ -2,8 +2,17 @@ import { useFormatPeso } from "@/lib/hooks/useFormatPeso";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 
+type Property = {
+  id: string;
+  images: { url: string }[];
+  name: string;
+  province: string;
+  city: string;
+  requiredGrossMonthlyIncome: number;
+};
+
 type PropertyListProps = {
-  properties: any;
+  properties: Property[];
   onClickPrev: () => void;
   onClickNext: () => void;
   currentPage: number;

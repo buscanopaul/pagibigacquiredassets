@@ -36,9 +36,9 @@ function Map({
     googleMapsApiKey: "AIzaSyCHM_lrHlDBhZ_5TWyYsAcdq6_-Fqrm6hU",
   });
 
-  const [map, setMap] = useState(null);
+  const [map, setMap] = useState<google.maps.Map | null>(null);
 
-  const onLoad = useCallback((map) => {
+  const onLoad = useCallback((map: google.maps.Map) => {
     const bounds = new window.google.maps.LatLngBounds(center);
     map.fitBounds(bounds);
     setMap(map);
@@ -80,7 +80,7 @@ function Map({
           onUnmount={onUnmount}
           options={mapOptions}
         >
-          {locations.map((location, _index) => (
+          {locations.map((location: any, _index: string) => (
             <Marker
               key={_index}
               position={{ lat: location.latitude, lng: location.longitude }}
