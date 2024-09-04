@@ -6,6 +6,10 @@ const nextConfig = {
         protocol: "https",
         hostname: process.env.NEXT_IMAGE_PATH,
       },
+      {
+        protocol: "https",
+        hostname: "a0.muscache.com",
+      },
     ],
   },
   webpack: (config, { isServer }) => {

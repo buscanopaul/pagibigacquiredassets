@@ -1,16 +1,92 @@
 "use client";
 
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import {
+  GoogleMap,
+  Marker,
+  OverlayView,
+  useJsApiLoader,
+} from "@react-google-maps/api";
+import Image from "next/image";
 import { memo, useCallback, useEffect, useState } from "react";
 import PropertyList from "./PropertyList";
 
+type Location = {
+  latitude: number;
+  longitude: number;
+};
+
+type Image = {
+  fileName: string;
+  url: string;
+};
+
+type Property = {
+  id: string;
+  name: string;
+  description: string;
+  location: Location;
+  rentalPrice?: number;
+  lotArea?: number;
+  floorArea?: number;
+  images?: Image[];
+  requiredGrossMonthlyIncome: number;
+};
+
 type MapProps = {
-  locations: any;
+  locations: Location[];
   properties: any;
   onClickPrev: () => void;
   onClickNext: () => void;
   currentPage: number;
 };
+
+const CustomInfoWindow = ({
+  property,
+  onClose,
+}: {
+  property: Property;
+  onClose: () => void;
+}) => (
+  <div className="bg-white rounded-lg shadow-lg w-64 relative">
+    <div className="h-40 relative w-full">
+      <Image
+        src={property.images && property.images[0]?.url}
+        layout="fill"
+        objectFit="cover"
+        alt={property.name}
+        className="rounded-t-xl"
+      />
+    </div>
+    <button
+      onClick={onClose}
+      className="absolute top-2 right-2 bg-white opacity-60 rounded-full p-1"
+    >
+      <XMarkIcon className="size-5 text-black active:opacity-70" />
+    </button>
+    <div className="p-4 rounded-b-xl">
+      <h2 className="text-lg font-bold mb-2">{property.name}</h2>
+      <p className="text-sm mb-2">{property.description}</p>
+      {property.rentalPrice && (
+        <p className="text-sm">
+          Bid Price: ₱{property.rentalPrice.toLocaleString()}
+        </p>
+      )}
+      {property.requiredGrossMonthlyIncome && (
+        <p className="text-sm">
+          Monthly Income: ₱
+          {property.requiredGrossMonthlyIncome.toLocaleString()}
+        </p>
+      )}
+      {property.lotArea && (
+        <p className="text-sm">Lot Area: {property.lotArea} sqm</p>
+      )}
+      {property.floorArea && (
+        <p className="text-sm">Floor Area: {property.floorArea} sqm</p>
+      )}
+    </div>
+  </div>
+);
 
 function Map({
   locations,
@@ -24,11 +100,6 @@ function Map({
     height: "100%",
   };
 
-  const center = {
-    lat: locations[0]?.latitude,
-    lng: locations[0]?.longitude,
-  };
-
   const image = "/images/logo_flag.png";
 
   const { isLoaded } = useJsApiLoader({
@@ -37,6 +108,21 @@ function Map({
   });
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(
+    null
+  );
+
+  const [center, setCenter] = useState(() => {
+    const baseCenter = {
+      lat: locations[0]?.latitude || 0,
+      lng: locations[0]?.longitude || 0,
+    };
+
+    return {
+      ...baseCenter,
+      lng: baseCenter.lng + 0.05,
+    };
+  });
 
   const onLoad = useCallback((map: google.maps.Map) => {
     const bounds = new window.google.maps.LatLngBounds(center);
@@ -55,6 +141,14 @@ function Map({
     return () => clearTimeout(timer);
   }, []);
 
+  const handleMarkerClick = (property: Property) => {
+    setSelectedProperty(property);
+  };
+
+  const handleInfoWindowClose = () => {
+    setSelectedProperty(null);
+  };
+
   if (!mapLoaded) return null;
 
   const mapOptions = isLoaded
@@ -66,6 +160,8 @@ function Map({
         keyboardShortcuts: false,
         minZoom: 4,
         maxZoom: 12,
+        clickableIcons: false,
+        mapTypeControl: false,
       }
     : {};
 
@@ -80,17 +176,35 @@ function Map({
           onUnmount={onUnmount}
           options={mapOptions}
         >
-          {locations.map((location: any, _index: string) => (
+          {properties.map((property: Property, _index: string) => (
             <Marker
               key={_index}
-              position={{ lat: location.latitude, lng: location.longitude }}
+              position={{
+                lat: property.location.latitude,
+                lng: property.location.longitude,
+              }}
               icon={{
                 url: image,
                 anchor: new window.google.maps.Point(5, 50),
               }}
-            ></Marker>
+              onClick={() => handleMarkerClick(property)}
+            />
           ))}
-          <div className="flex items-center justify-end right-0 absolute w-1/2 top-6">
+          {selectedProperty && (
+            <OverlayView
+              position={{
+                lat: selectedProperty.location.latitude,
+                lng: selectedProperty.location.longitude,
+              }}
+              mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+            >
+              <CustomInfoWindow
+                property={selectedProperty}
+                onClose={handleInfoWindowClose}
+              />
+            </OverlayView>
+          )}
+          <div className="flex items-center justify-end right-0 absolute max-w-1/2 top-6">
             <PropertyList
               properties={properties}
               onClickNext={onClickNext}
