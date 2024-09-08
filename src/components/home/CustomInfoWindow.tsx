@@ -1,3 +1,4 @@
+import { HeartIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
@@ -43,12 +44,21 @@ const CustomInfoWindow = ({
           className="rounded-t-xl"
         />
       </div>
-      <button
-        onClick={onClose}
-        className="absolute top-2 right-2 bg-white opacity-80 hover:opacity-100 rounded-full p-1 transition-all"
-      >
-        <XMarkIcon className="size-5 text-black hover:opacity-100 opacity-70" />
-      </button>
+      <div className="absolute top-2 right-2 flex items-center gap-3">
+        <button
+          onClick={onClose}
+          className="bg-white opacity-80 hover:opacity-100 rounded-full p-1 transition ease-in-out hover:scale-110"
+        >
+          <HeartIcon className="size-5 text-black hover:opacity-100 opacity-70" />
+        </button>
+
+        <button
+          onClick={onClose}
+          className="bg-white opacity-80 hover:opacity-100 rounded-full p-1 transition ease-in-out hover:scale-110"
+        >
+          <XMarkIcon className="size-5 text-black hover:opacity-100 opacity-70" />
+        </button>
+      </div>
       <div className="p-4 rounded-b-xl">
         <h2 className="text-lg font-bold mb-2">{property.name}</h2>
         <p className="text-sm mb-2">{property.description}</p>
