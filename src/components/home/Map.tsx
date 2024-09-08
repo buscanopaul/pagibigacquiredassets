@@ -96,6 +96,18 @@ function Map({
       }
     : {};
 
+  const defaultIcon = {
+    url: "/images/logo_active.png",
+    anchor: new window.google.maps.Point(5, 50),
+    scaledSize: new window.google.maps.Size(30, 33),
+  };
+
+  const selectedIcon = {
+    url: "/images/logo.png",
+    anchor: new window.google.maps.Point(5, 50),
+    scaledSize: new window.google.maps.Size(30, 33),
+  };
+
   return (
     <div className="h-screen w-full">
       {isLoaded ? (
@@ -114,11 +126,11 @@ function Map({
                 lat: property.location.latitude,
                 lng: property.location.longitude,
               }}
-              icon={{
-                url: image,
-                anchor: new window.google.maps.Point(5, 50),
-                scaledSize: new window.google.maps.Size(30, 33),
-              }}
+              icon={
+                selectedProperty?.id === property.id
+                  ? selectedIcon
+                  : defaultIcon
+              }
               onClick={() => handleMarkerClick(property)}
             />
           ))}
