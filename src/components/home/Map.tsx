@@ -1,92 +1,23 @@
 "use client";
 
-import { XMarkIcon } from "@heroicons/react/24/solid";
 import {
   GoogleMap,
   Marker,
   OverlayView,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import Image from "next/image";
 import { memo, useCallback, useEffect, useState } from "react";
+import { Location, Property } from "../../../types/Property";
+import CustomInfoWindow from "./CustomInfoWindow";
 import PropertyList from "./PropertyList";
-
-type Location = {
-  latitude: number;
-  longitude: number;
-};
-
-type Image = {
-  fileName: string;
-  url: string;
-};
-
-type Property = {
-  id: string;
-  name: string;
-  description: string;
-  location: Location;
-  rentalPrice?: number;
-  lotArea?: number;
-  floorArea?: number;
-  images?: Image[];
-  requiredGrossMonthlyIncome: number;
-};
 
 type MapProps = {
   locations: Location[];
-  properties: any;
+  properties: Property[];
   onClickPrev: () => void;
   onClickNext: () => void;
   currentPage: number;
 };
-
-const CustomInfoWindow = ({
-  property,
-  onClose,
-}: {
-  property: Property;
-  onClose: () => void;
-}) => (
-  <div className="bg-white rounded-lg shadow-lg w-64 relative">
-    <div className="h-40 relative w-full">
-      <Image
-        src={property.images && property.images[0]?.url}
-        layout="fill"
-        objectFit="cover"
-        alt={property.name}
-        className="rounded-t-xl"
-      />
-    </div>
-    <button
-      onClick={onClose}
-      className="absolute top-2 right-2 bg-white opacity-60 rounded-full p-1"
-    >
-      <XMarkIcon className="size-5 text-black active:opacity-70" />
-    </button>
-    <div className="p-4 rounded-b-xl">
-      <h2 className="text-lg font-bold mb-2">{property.name}</h2>
-      <p className="text-sm mb-2">{property.description}</p>
-      {property.rentalPrice && (
-        <p className="text-sm">
-          Bid Price: ₱{property.rentalPrice.toLocaleString()}
-        </p>
-      )}
-      {property.requiredGrossMonthlyIncome && (
-        <p className="text-sm">
-          Monthly Income: ₱
-          {property.requiredGrossMonthlyIncome.toLocaleString()}
-        </p>
-      )}
-      {property.lotArea && (
-        <p className="text-sm">Lot Area: {property.lotArea} sqm</p>
-      )}
-      {property.floorArea && (
-        <p className="text-sm">Floor Area: {property.floorArea} sqm</p>
-      )}
-    </div>
-  </div>
-);
 
 function Map({
   locations,
@@ -100,7 +31,7 @@ function Map({
     height: "100%",
   };
 
-  const image = "/images/logo_flag.png";
+  const image = "/images/logo_active.png";
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -166,7 +97,7 @@ function Map({
     : {};
 
   return (
-    <div className="h-screen w-full fixed">
+    <div className="h-screen w-full">
       {isLoaded ? (
         <GoogleMap
           mapContainerStyle={containerStyle}
@@ -176,9 +107,9 @@ function Map({
           onUnmount={onUnmount}
           options={mapOptions}
         >
-          {properties.map((property: Property, _index: string) => (
+          {properties.map((property: Property) => (
             <Marker
-              key={_index}
+              key={property.id}
               position={{
                 lat: property.location.latitude,
                 lng: property.location.longitude,
@@ -186,6 +117,7 @@ function Map({
               icon={{
                 url: image,
                 anchor: new window.google.maps.Point(5, 50),
+                scaledSize: new window.google.maps.Size(30, 33),
               }}
               onClick={() => handleMarkerClick(property)}
             />
@@ -204,7 +136,7 @@ function Map({
               />
             </OverlayView>
           )}
-          <div className="flex items-center justify-end right-0 absolute max-w-1/2 top-6">
+          <div className="flex items-center justify-end right-0 absolute top-6 w-1/2">
             <PropertyList
               properties={properties}
               onClickNext={onClickNext}

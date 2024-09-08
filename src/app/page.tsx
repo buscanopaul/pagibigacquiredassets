@@ -3,30 +3,7 @@
 import Map from "@/components/home/Map";
 import MapSkeleton from "@/components/home/MapSkeleton";
 import { useEffect, useState } from "react";
-
-type Property = {
-  pagIbigPropertyNumber: string;
-  name: string;
-  description: string;
-  floorArea: number;
-  lotArea: number;
-  province: string;
-  propertyType: string;
-  rentalPrice: number;
-  slug: string;
-  remarksType: string;
-  requiredGrossMonthlyIncome: number;
-  tctCctNo: string;
-  id: string;
-  images: Array<{ fileName: string; url: string }>;
-  city: string;
-  barangay: string;
-  appraisalDate: string;
-  location: {
-    latitude: number;
-    longitude: number;
-  };
-};
+import { Property } from "../../types/Property";
 
 async function getProperties(page = 1, limit = 9): Promise<Property[]> {
   const HYGRAPH_ENDPOINT = process.env.NEXT_PUBLIC_HYGRAPH_ENDPOINT;

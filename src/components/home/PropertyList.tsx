@@ -1,15 +1,7 @@
 import { useFormatPeso } from "@/lib/hooks/useFormatPeso";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-
-type Property = {
-  id: string;
-  images: { url: string }[];
-  name: string;
-  province: string;
-  city: string;
-  requiredGrossMonthlyIncome: number;
-};
+import { Property } from "../../../types/Property";
 
 type PropertyListProps = {
   properties: Property[];
@@ -24,10 +16,8 @@ export default function PropertyList({
   onClickNext,
   currentPage,
 }: PropertyListProps) {
-  console.log(properties);
-
   return (
-    <div className="bg-white w-full rounded-tl-3xl rounded-bl-3xl p-4 grid grid-cols-3 gap-4 overflow-y-auto h-[630px]">
+    <div className="bg-white rounded-tl-3xl rounded-bl-3xl p-4 grid grid-cols-3 gap-4 overflow-y-auto h-[630px] w-full">
       {properties.map((property) => (
         <div key={property.id} className="group">
           <Link href="/property">
