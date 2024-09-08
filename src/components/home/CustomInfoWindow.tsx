@@ -30,7 +30,7 @@ const CustomInfoWindow = ({
 
   return (
     <div
-      className="bg-white rounded-lg shadow-lg w-64 relative animate-f-fade-in -left-[115px]"
+      className="bg-white rounded-lg shadow-xl w-64 relative animate-f-fade-in -left-[115px]"
       style={{ minWidth: "300px" }}
       ref={wrapperRef}
     >
@@ -45,9 +45,9 @@ const CustomInfoWindow = ({
       </div>
       <button
         onClick={onClose}
-        className="absolute top-2 right-2 bg-white opacity-60 rounded-full p-1"
+        className="absolute top-2 right-2 bg-white opacity-80 hover:opacity-100 rounded-full p-1 transition-all"
       >
-        <XMarkIcon className="size-5 text-black active:opacity-70" />
+        <XMarkIcon className="size-5 text-black hover:opacity-100 opacity-70" />
       </button>
       <div className="p-4 rounded-b-xl">
         <h2 className="text-lg font-bold mb-2">{property.name}</h2>
