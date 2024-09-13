@@ -18,6 +18,9 @@ export default function PropertyList({
 }: PropertyListProps) {
   return (
     <div className="bg-white rounded-tl-3xl rounded-bl-3xl p-4 grid grid-cols-3 gap-4 overflow-y-auto h-[630px] w-full">
+      {properties.length === 0 && (
+        <p className="text-center">No properties found</p>
+      )}
       {properties.map((property) => (
         <div key={property.id} className="group">
           <Link href="/property">

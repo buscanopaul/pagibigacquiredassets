@@ -10,6 +10,7 @@ import { memo, useCallback, useEffect, useState } from "react";
 import { Location, Property } from "../../../types/Property";
 import CustomInfoWindow from "./CustomInfoWindow";
 import PropertyList from "./PropertyList";
+import Search from "./Search";
 
 type MapProps = {
   locations: Location[];
@@ -109,54 +110,57 @@ function Map({
   };
 
   return (
-    <div className="h-screen w-full">
+    <div className="h-screen w-full relative">
       {isLoaded ? (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={10}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-          options={mapOptions}
-        >
-          {properties.map((property: Property) => (
-            <Marker
-              key={property.id}
-              position={{
-                lat: property.location.latitude,
-                lng: property.location.longitude,
-              }}
-              icon={
-                selectedProperty?.id === property.id
-                  ? selectedIcon
-                  : defaultIcon
-              }
-              onClick={() => handleMarkerClick(property)}
-            />
-          ))}
-          {selectedProperty && (
-            <OverlayView
-              position={{
-                lat: selectedProperty.location.latitude,
-                lng: selectedProperty.location.longitude,
-              }}
-              mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-            >
-              <CustomInfoWindow
-                property={selectedProperty}
-                onClose={handleInfoWindowClose}
+        <>
+          <Search />
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={10}
+            onLoad={onLoad}
+            onUnmount={onUnmount}
+            options={mapOptions}
+          >
+            {properties.map((property: Property) => (
+              <Marker
+                key={property.id}
+                position={{
+                  lat: property.location.latitude,
+                  lng: property.location.longitude,
+                }}
+                icon={
+                  selectedProperty?.id === property.id
+                    ? selectedIcon
+                    : defaultIcon
+                }
+                onClick={() => handleMarkerClick(property)}
               />
-            </OverlayView>
-          )}
-          <div className="flex items-center justify-end right-0 absolute top-6 w-1/2">
-            <PropertyList
-              properties={properties}
-              onClickNext={onClickNext}
-              onClickPrev={onClickPrev}
-              currentPage={currentPage}
-            />
-          </div>
-        </GoogleMap>
+            ))}
+            {selectedProperty && (
+              <OverlayView
+                position={{
+                  lat: selectedProperty.location.latitude,
+                  lng: selectedProperty.location.longitude,
+                }}
+                mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+              >
+                <CustomInfoWindow
+                  property={selectedProperty}
+                  onClose={handleInfoWindowClose}
+                />
+              </OverlayView>
+            )}
+            <div className="flex items-center justify-end right-0 absolute top-6 w-1/2">
+              <PropertyList
+                properties={properties}
+                onClickNext={onClickNext}
+                onClickPrev={onClickPrev}
+                currentPage={currentPage}
+              />
+            </div>
+          </GoogleMap>
+        </>
       ) : null}
     </div>
   );
