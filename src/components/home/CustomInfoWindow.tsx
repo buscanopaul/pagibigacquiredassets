@@ -68,10 +68,10 @@ const CustomInfoWindow = ({
           </p>
         )}
         {property.requiredGrossMonthlyIncome && (
-          <p className="text-sm">
-            Monthly Income: ₱
-            {property.requiredGrossMonthlyIncome.toLocaleString()}
-          </p>
+          <div className="mb-3">
+            <p className="text-sm">Required Monthly Income:</p>
+            <p>₱{property.requiredGrossMonthlyIncome.toLocaleString()}</p>
+          </div>
         )}
         {property.lotArea && (
           <p className="text-sm">Lot Area: {property.lotArea} sqm</p>

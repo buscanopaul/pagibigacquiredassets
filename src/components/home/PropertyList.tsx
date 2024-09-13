@@ -42,7 +42,7 @@ export default function PropertyList({
             </p>
             <div className="h-1" />
             <p className="font-bold text-xs">
-              {useFormatPeso(property.requiredGrossMonthlyIncome)}/month
+              {useFormatPeso(property.monthlyAmortization)}/month
             </p>
           </Link>
         </div>

@@ -6,9 +6,10 @@ import {
   OverlayView,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import { memo, useCallback, useEffect, useState } from "react";
+import { Fragment, memo, useCallback, useEffect, useState } from "react";
 import { Location, Property } from "../../../types/Property";
 import CustomInfoWindow from "./CustomInfoWindow";
+import PriceLabel from "./PriceLabel";
 import PropertyList from "./PropertyList";
 import Search from "./Search";
 
@@ -125,19 +126,37 @@ function Map({
             options={mapOptions}
           >
             {properties.map((property: Property) => (
-              <Marker
-                key={property.id}
-                position={{
-                  lat: property.location.latitude,
-                  lng: property.location.longitude,
-                }}
-                icon={
-                  selectedProperty?.id === property.id
-                    ? selectedIcon
-                    : defaultIcon
-                }
-                onClick={() => handleMarkerClick(property)}
-              />
+              <Fragment key={property.id}>
+                <Marker
+                  key={property.id}
+                  position={{
+                    lat: property.location.latitude,
+                    lng: property.location.longitude,
+                  }}
+                  icon={
+                    selectedProperty?.id === property.id
+                      ? selectedIcon
+                      : defaultIcon
+                  }
+                  onClick={() => handleMarkerClick(property)}
+                />
+                <OverlayView
+                  position={{
+                    lat: property.location.latitude,
+                    lng: property.location.longitude,
+                  }}
+                  mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                  getPixelPositionOffset={(width, height) => ({
+                    x: -height - 62,
+                    y: -height - 85,
+                  })}
+                >
+                  <PriceLabel
+                    monthlyAmortization={property.monthlyAmortization}
+                    onClick={() => handleMarkerClick(property)}
+                  />
+                </OverlayView>
+              </Fragment>
             ))}
             {selectedProperty && (
               <OverlayView

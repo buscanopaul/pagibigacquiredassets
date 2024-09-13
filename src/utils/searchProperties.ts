@@ -31,6 +31,7 @@ async function searchProperties(
             slug
             remarksType
             requiredGrossMonthlyIncome
+            monthlyAmortization
             tctCctNo
             id
             images {

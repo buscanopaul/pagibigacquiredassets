@@ -17,6 +17,7 @@ export type Property = {
   barangay: string;
   appraisalDate: string;
   location: Location;
+  monthlyAmortization: number;
 };
 
 export type Location = {
