@@ -1,13 +1,15 @@
 import { useFormatPeso } from "@/lib/hooks/useFormatPeso";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Property } from "../../../types/Property";
 
 type PropertyListProps = {
   properties: Property[];
-  onClickPrev: () => void;
-  onClickNext: () => void;
+  onClickPrev?: () => void;
+  onClickNext?: () => void;
   currentPage: number;
+  hasNextPage: boolean;
 };
 
 export default function PropertyList({
@@ -15,6 +17,7 @@ export default function PropertyList({
   onClickPrev,
   onClickNext,
   currentPage,
+  hasNextPage,
 }: PropertyListProps) {
   return (
     <div className="bg-white rounded-tl-3xl rounded-bl-3xl p-4 grid grid-cols-3 gap-4 overflow-y-auto h-[630px] w-full">
@@ -59,8 +62,12 @@ export default function PropertyList({
         <div className="bg-[#381d6e] rounded-full h-8 w-8 justify-center items-center flex">
           <span className="text-white">{currentPage}</span>
         </div>
-        <button onClick={onClickNext}>
-          <ChevronRightIcon className="size-6 text-black active:opacity-70" />
+        <button onClick={onClickNext} disabled={!hasNextPage}>
+          <ChevronRightIcon
+            className={`size-6 text-black ${
+              !hasNextPage ? "text-gray-300" : "text-black"
+            } active:opacity-70`}
+          />
         </button>
       </div>
     </div>

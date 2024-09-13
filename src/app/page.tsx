@@ -3,6 +3,7 @@
 import Map from "@/components/home/Map";
 import MapSkeleton from "@/components/home/MapSkeleton";
 import usePropertiesStore from "@/store/usePropertiesStore";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -10,8 +11,12 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
+  const searchParams = useSearchParams();
+
+  const searchTerm = searchParams.get("search") || "";
+
   useEffect(() => {
-    searchProperties("", currentPage, itemsPerPage);
+    searchProperties(searchTerm, currentPage, itemsPerPage);
   }, [currentPage]);
 
   const locations = properties.map((property) => property.location);
@@ -27,14 +32,17 @@ export default function Home() {
     setCurrentPage((prev) => prev + 1);
   };
 
+  const hasNextPage = properties.length === itemsPerPage;
+
   return (
     <main>
       <Map
         locations={locations}
         properties={properties}
-        onClickNext={onClickNext}
-        onClickPrev={onClickPrev}
+        onClickNext={hasNextPage ? onClickNext : undefined}
+        onClickPrev={currentPage > 1 ? onClickPrev : undefined}
         currentPage={currentPage}
+        hasNextPage={hasNextPage}
       />
     </main>
   );

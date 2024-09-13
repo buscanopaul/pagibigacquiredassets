@@ -1,15 +1,22 @@
 import { Input } from "@/components/ui/input";
 import usePropertiesStore from "@/store/usePropertiesStore";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function Search() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const { searchProperties } = usePropertiesStore();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get("search") || ""
+  );
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchTerm.trim()) {
       searchProperties(searchTerm, 1, 9);
+      router.push(`?search=${encodeURIComponent(searchTerm)}`);
     }
   };
 

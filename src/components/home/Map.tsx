@@ -15,9 +15,10 @@ import Search from "./Search";
 type MapProps = {
   locations: Location[];
   properties: Property[];
-  onClickPrev: () => void;
-  onClickNext: () => void;
+  onClickPrev?: () => void;
+  onClickNext?: () => void;
   currentPage: number;
+  hasNextPage: boolean;
 };
 
 function Map({
@@ -26,6 +27,7 @@ function Map({
   onClickPrev,
   onClickNext,
   currentPage,
+  hasNextPage,
 }: MapProps) {
   const containerStyle = {
     width: "100%",
@@ -157,6 +159,7 @@ function Map({
                 onClickNext={onClickNext}
                 onClickPrev={onClickPrev}
                 currentPage={currentPage}
+                hasNextPage={hasNextPage}
               />
             </div>
           </GoogleMap>
