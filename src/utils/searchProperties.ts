@@ -1,5 +1,10 @@
 import { Property } from "../../types/Property";
 
+interface SearchResult {
+  properties: Property[];
+  totalCount: number;
+}
+
 async function searchProperties(
   page = 1,
   limit = 9,
@@ -46,6 +51,11 @@ async function searchProperties(
               longitude
             }
           }
+          propertiesConnection(where: { _search: $keyword }) {
+            aggregate {
+              count
+            }
+          }
         }`,
       variables: {
         skip,
@@ -55,8 +65,16 @@ async function searchProperties(
     }),
   });
 
-  const json = await response.json();
-  return json.data.properties;
+  const data = await response.json();
+
+  if (data.errors) {
+    throw new Error(data.errors[0].message);
+  }
+
+  const properties: Property[] = data.data.properties;
+  const totalCount: number = data.data.propertiesConnection.aggregate.count;
+
+  return { properties, totalCount };
 }
 
 export default searchProperties;

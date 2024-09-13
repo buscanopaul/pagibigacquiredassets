@@ -13,7 +13,6 @@ export default function Search() {
   );
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
     if (searchTerm.trim()) {
       searchProperties(searchTerm, 1, 9);
       router.push(`?search=${encodeURIComponent(searchTerm)}`);

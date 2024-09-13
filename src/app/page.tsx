@@ -7,7 +7,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const { properties, loading, error, searchProperties } = usePropertiesStore();
+  const { properties, loading, error, searchProperties, totalCount } =
+    usePropertiesStore();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
