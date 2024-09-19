@@ -24,7 +24,7 @@ async function searchProperties(
     },
     body: JSON.stringify({
       query: `query Properties($skip: Int!, $limit: Int!, $keyword: String!) {
-          properties(first: $limit, skip: $skip, where: {_search: $keyword}) {
+          properties(first: $limit, skip: $skip, where: {_search: $keyword}, orderBy: createdAt_DESC) {
             pagIbigPropertyNumber
             name
             description
