@@ -9,6 +9,7 @@ import {
 import { Fragment, memo, useCallback, useEffect, useState } from "react";
 import { Location, Property } from "../../../types/Property";
 import CustomInfoWindow from "./CustomInfoWindow";
+import CustomZoonControl from "./CustomZoonControl";
 import PriceLabel from "./PriceLabel";
 import PropertyList from "./PropertyList";
 import Search from "./Search";
@@ -88,15 +89,13 @@ function Map({
 
   const mapOptions = isLoaded
     ? {
-        zoomControlOptions: {
-          position: google.maps.ControlPosition.TOP_LEFT,
-        },
         fullscreenControl: false,
         keyboardShortcuts: false,
         minZoom: 4,
         maxZoom: 12,
         clickableIcons: false,
         mapTypeControl: false,
+        zoomControl: false,
       }
     : {};
 
@@ -125,6 +124,7 @@ function Map({
             onUnmount={onUnmount}
             options={mapOptions}
           >
+            <CustomZoonControl map={map} />
             {properties.map((property: Property) => (
               <Fragment key={property.id}>
                 <Marker

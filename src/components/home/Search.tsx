@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/input";
 import usePropertiesStore from "@/store/usePropertiesStore";
+import { CircleXIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -20,14 +21,22 @@ export default function Search() {
   };
 
   return (
-    <form onSubmit={handleSearch} className="absolute top-8 left-24 z-10 w-1/4">
-      <Input
-        type="text"
-        placeholder="Ex. Province, City, Barangay, Village"
-        className="rounded-full bg-white shadow-xl border-0 px-4 py-6"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+    <form onSubmit={handleSearch} className="absolute top-8 left-4 z-10 w-1/4">
+      <div className="relative">
+        <Input
+          type="text"
+          placeholder="Ex. Province, City, Barangay, Village"
+          className="rounded-full bg-white shadow-xl border-0 px-4 py-5"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        {searchTerm.length > 0 && (
+          <CircleXIcon
+            className="w-4 h-4 text-black absolute right-3 top-3 active:opacity-70 cursor-pointer"
+            onClick={() => setSearchTerm("")}
+          />
+        )}
+      </div>
     </form>
   );
 }
