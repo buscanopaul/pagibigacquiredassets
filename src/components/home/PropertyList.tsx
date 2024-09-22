@@ -37,7 +37,7 @@ export default function PropertyList({
       <div className="grid grid-cols-3 gap-4">
         {properties.map((property) => (
           <div key={property.id} className="group">
-            <Link href="/property">
+            <Link href={`/property/${property.slug}`}>
               <div
                 style={{ backgroundImage: `url(${property.images[0]?.url})` }}
                 className="bg-cover w-full h-40 rounded-lg bg-[#381d6e] relative group-hover:shadow-xl transition ease-in-out"
