@@ -4,7 +4,7 @@ import MiniPhoto from "./MiniPhoto";
 export default function Photos() {
   return (
     <div className="md:w-[60%]">
-      <LargePhoto />
+      <LargePhoto isFirst />
       <div className="h-3" />
       <div className="flex gap-3">
         <MiniPhoto />
